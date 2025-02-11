@@ -9,12 +9,11 @@ jobs:
       matrix:
         include:
           - branch: master
-            docker_push: true
-            version_suffix: ga
+            tag: v0.0.0
     steps:
       - name: Send Dispatch Event
         run: |
-          curl -d '{"event_type":"run-tests","client_payload":${{ toJson(matrix) }}}' \
+          curl -d '{"event_type":"run-tests","client_payload":{"branch":"${{ matrix.branch }}","tag":"${{ matrix.tag }}"}}' \
                -v -L -H "Accept: application/vnd.github+json" \
                -H "Authorization: Bearer ${{ secrets.PAT }}" \
                -H "X-GitHub-Api-Version: 2022-11-28" \
