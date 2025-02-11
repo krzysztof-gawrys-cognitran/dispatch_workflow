@@ -14,10 +14,11 @@ jobs:
     steps:
       - name: Send Dispatch Event
         run: |
-          curl -d '{"event_type":"run-tests","client_payload":"${{ toJson(matrix) }}"}' \
+          curl -d '{"event_type":"run-tests","client_payload":${{ toJson(matrix) }}}' \
                -v -L -H "Accept: application/vnd.github+json" \
                -H "Authorization: Bearer ${{ secrets.PAT }}" \
                -H "X-GitHub-Api-Version: 2022-11-28" \
+               --fail-with-body \
                https://api.github.com/repos/krzysztof-gawrys-cognitran/promote-workflow/dispatches
 
       - name: Wait for Workflow to Complete
