@@ -1,6 +1,12 @@
 name: Dispatch Workflow with Parameters
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: "Optional: Image Tag to promote. If left blank the following scheme will be used: 'develop -> ea', 'ea -> qa', 'qa -> prod', 'qa -> ve'"
+        required: true
+        type: 'string'
+        default: ""
 
 jobs:
   trigger:
@@ -11,7 +17,7 @@ jobs:
     steps:
       - name: Send Dispatch Event
         run: |
-          curl -d '{"event_type":"run-tests","client_payload":{"branch":"${{ matrix.branch }}"}}' \
+          curl -d '{"event_type":"run-tests","client_payload":{"tag":"${{ inputs.tag }}"}}' \
                -v -L -H "Accept: application/vnd.github+json" \
                -H "Authorization: Bearer ${{ secrets.PAT }}" \
                -H "X-GitHub-Api-Version: 2022-11-28" \
